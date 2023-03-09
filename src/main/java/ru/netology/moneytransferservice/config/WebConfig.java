@@ -8,7 +8,7 @@ import ru.netology.moneytransferservice.utils.LoggerOperations;
 public class WebConfig {
 
     @Bean
-    public LoggerOperations getLoggerOperation(){
+    public LoggerOperations getLoggerOperation() {
         return new LoggerOperations();
     }
 }

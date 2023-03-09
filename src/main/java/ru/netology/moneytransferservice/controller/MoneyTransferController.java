@@ -1,35 +1,37 @@
 package ru.netology.moneytransferservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.netology.moneytransferservice.model.GoodResponse;
-import ru.netology.moneytransferservice.model.MoneyTransferRequestTO;
+import ru.netology.moneytransferservice.model.confirmingObjact.ConfirmingOperationTO;
+import ru.netology.moneytransferservice.model.transferObjact.MoneyTransferRequestTO;
+import ru.netology.moneytransferservice.model.transferResponses.GoodTransferResponseTO;
 import ru.netology.moneytransferservice.service.MoneyTransferService;
 
+@Slf4j
+@CrossOrigin(origins = "https://serp-ya.github.io")
 @RestController
 @RequiredArgsConstructor
 public class MoneyTransferController {
 
     private final MoneyTransferService moneyTransferService;
+
     @PostMapping("${application.endpoint.transfer}")
-    public ResponseEntity<?> moneyTransfer(@RequestBody final MoneyTransferRequestTO moneyTransferRequestTO){
-        final Long id = moneyTransferService.transferMoney(moneyTransferRequestTO);
-
-        return new ResponseEntity<>(new GoodResponse(id), HttpStatus.OK);
+    public ResponseEntity<GoodTransferResponseTO> moneyTransfer(@RequestBody final MoneyTransferRequestTO moneyTransferRequestTO) {
+        log.debug("Request to /transfer");
+        final long id = moneyTransferService.moneyTransferRequest(moneyTransferRequestTO);
+        return ResponseEntity.ok(new GoodTransferResponseTO(id));
     }
 
-    @GetMapping("/")
-    public String fetmap(){
-        return "WORK";
-    }
-
-    @GetMapping("${application.endpoint.transfer}")
-    public String fetmap2(){
-        return "WORK TO";
+    @PostMapping("${application.endpoint.confirmOperation}")
+    public ResponseEntity<?> confirmOperation(@RequestBody ConfirmingOperationTO confirmingOperationTO) {
+        log.debug("Request to /confirmOperation");
+        final long id = moneyTransferService.transferСonfirmation(confirmingOperationTO);
+        return ResponseEntity.ok(new GoodTransferResponseTO(id));
     }
 }
+

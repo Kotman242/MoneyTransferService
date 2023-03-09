@@ -1,4 +1,4 @@
-package ru.netology.moneytransferservice.model;
+package ru.netology.moneytransferservice.model.transferResponses;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
@@ -9,10 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GoodResponse {
+public class GoodTransferResponseTO {
     private final String operationId;
 
-    public GoodResponse(long id) {
+    public GoodTransferResponseTO(long id) {
         this.operationId = String.valueOf(id);
     }
 }

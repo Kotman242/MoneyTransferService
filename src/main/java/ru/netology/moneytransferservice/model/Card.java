@@ -39,7 +39,7 @@ public class Card {
     @Override
     public String toString() {
         return "Card{" +
-                "NUMBER='" + NUMBER + '\'' +
+                "CORD_FROM_NUMBER='" + NUMBER + '\'' +
                 ", VALID_TILL='" + VALID_TILL + '\'' +
                 ", CVC='" + CVC + '\'' +
                 ", balance=" + balance +
