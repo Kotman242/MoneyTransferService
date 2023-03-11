@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import ru.netology.moneytransferservice.exception.NotEnoughMoneyException;
 import ru.netology.moneytransferservice.model.Amount;
 import ru.netology.moneytransferservice.model.Card;
+import ru.netology.moneytransferservice.service.Transfer;
 
 public class TransferTest {
 

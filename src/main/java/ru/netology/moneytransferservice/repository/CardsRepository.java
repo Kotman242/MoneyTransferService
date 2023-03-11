@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 @RequiredArgsConstructor
-public class CardsRepository implements DataBase {
+public class CardsRepository {
     private static final ConcurrentHashMap<String, Card> repository = new ConcurrentHashMap<>();
 
     static {
@@ -16,10 +16,6 @@ public class CardsRepository implements DataBase {
         repository.put("5555555555555555", new Card("5555555555555555", "11/55", "555").setBalance(5000));
         repository.put("8888888888888888", new Card("8888888888888888", "11/88", "888").setBalance(8000));
 
-    }
-
-    public boolean isExist(String cardNumber) {
-        return repository.containsKey(cardNumber);
     }
 
     public boolean isValideCard(Card card) {
@@ -30,4 +26,7 @@ public class CardsRepository implements DataBase {
         return repository.get(number);
     }
 
+    public boolean isExist(String cardNumber) {
+        return repository.containsKey(cardNumber);
+    }
 }

@@ -10,27 +10,27 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.netology.moneytransferservice.model.confirmingObjact.ConfirmingOperationTO;
 import ru.netology.moneytransferservice.model.transferObjact.MoneyTransferRequestTO;
 import ru.netology.moneytransferservice.model.transferResponses.GoodTransferResponseTO;
-import ru.netology.moneytransferservice.service.MoneyTransferService;
+import ru.netology.moneytransferservice.service.TransferService;
 
 @Slf4j
-@CrossOrigin(origins = "https://serp-ya.github.io")
+@CrossOrigin(origins = "${application.endpoint.crossOrigins}")
 @RestController
 @RequiredArgsConstructor
 public class MoneyTransferController {
 
-    private final MoneyTransferService moneyTransferService;
+    private final TransferService service;
 
     @PostMapping("${application.endpoint.transfer}")
     public ResponseEntity<GoodTransferResponseTO> moneyTransfer(@RequestBody final MoneyTransferRequestTO moneyTransferRequestTO) {
         log.debug("Request to /transfer");
-        final long id = moneyTransferService.moneyTransferRequest(moneyTransferRequestTO);
+        final long id = service.moneyTransferRequest(moneyTransferRequestTO);
         return ResponseEntity.ok(new GoodTransferResponseTO(id));
     }
 
     @PostMapping("${application.endpoint.confirmOperation}")
     public ResponseEntity<?> confirmOperation(@RequestBody ConfirmingOperationTO confirmingOperationTO) {
         log.debug("Request to /confirmOperation");
-        final long id = moneyTransferService.transferСonfirmation(confirmingOperationTO);
+        final long id = service.transferСonfirmation(confirmingOperationTO);
         return ResponseEntity.ok(new GoodTransferResponseTO(id));
     }
 }

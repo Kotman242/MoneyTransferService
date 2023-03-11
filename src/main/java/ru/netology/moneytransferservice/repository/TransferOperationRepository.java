@@ -6,7 +6,7 @@ import ru.netology.moneytransferservice.model.transferObjact.TransferOperation;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class TransferOperationRepository implements DataBase {
+public class TransferOperationRepository {
 
     private static final ConcurrentHashMap<Long, TransferOperation> repository = new ConcurrentHashMap<>();
 
@@ -14,11 +14,11 @@ public class TransferOperationRepository implements DataBase {
         repository.put(transferOperation.getId(), transferOperation);
     }
 
-    public boolean isExist(Long id) {
-        return repository.containsKey(id);
-    }
-
     public TransferOperation get(long id) {
         return repository.get(id);
+    }
+
+    public boolean isExist(long id) {
+        return repository.containsKey(id);
     }
 }
