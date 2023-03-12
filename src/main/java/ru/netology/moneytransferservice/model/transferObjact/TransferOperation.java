@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.netology.moneytransferservice.model.Amount;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Getter
@@ -36,5 +37,18 @@ public final class TransferOperation {
 
     public boolean isCompleted(long id) {
         return completed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TransferOperation that = (TransferOperation) o;
+        return id == that.id && Objects.equals(amount, that.amount) && Objects.equals(numberCardTo, that.numberCardTo) && Objects.equals(numberCardFrom, that.numberCardFrom);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(amount, id, numberCardTo, numberCardFrom);
     }
 }

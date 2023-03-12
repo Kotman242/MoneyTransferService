@@ -1,4 +1,4 @@
-package ru.netology.moneytransferservice.utils;
+package ru.netology.moneytransferservice.validation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

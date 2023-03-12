@@ -15,7 +15,7 @@ public class Card {
     private final String NUMBER;
     private final String VALID_TILL;
     private final String CVC;
-    private long balance;
+    private double balance;
 
     public Card(String NUMBER, String VALID_TILL, String CVC) {
         this.NUMBER = NUMBER;

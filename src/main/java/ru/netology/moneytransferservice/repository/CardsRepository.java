@@ -19,6 +19,7 @@ public class CardsRepository {
     }
 
     public boolean isValideCard(Card card) {
+        if (!repository.containsKey(card.getNUMBER())) return false;
         return repository.get(card.getNUMBER()).equals(card);
     }
 

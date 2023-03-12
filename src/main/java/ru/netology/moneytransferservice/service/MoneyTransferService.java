@@ -3,13 +3,16 @@ package ru.netology.moneytransferservice.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.netology.moneytransferservice.model.Amount;
+import ru.netology.moneytransferservice.model.Card;
 import ru.netology.moneytransferservice.model.confirmingObjact.ConfirmingOperationTO;
 import ru.netology.moneytransferservice.model.transferObjact.MoneyTransferRequestTO;
 import ru.netology.moneytransferservice.model.transferObjact.TransferOperation;
 import ru.netology.moneytransferservice.repository.CardsRepository;
 import ru.netology.moneytransferservice.repository.TransferOperationRepository;
-import ru.netology.moneytransferservice.utils.ExceptionChecker;
 import ru.netology.moneytransferservice.utils.LoggerOperations;
+import ru.netology.moneytransferservice.validation.ExceptionChecker;
+import ru.netology.moneytransferservice.validation.Transfer;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ public class MoneyTransferService implements TransferService {
     private final TransferOperationRepository transferOperationRepository;
     private final LoggerOperations loggerOperations;
     private final ExceptionChecker exceptionChecker;
+    private final Transfer transfer;
 
     @Override
     public long moneyTransferRequest(MoneyTransferRequestTO moneyTransferRequestTO) {
@@ -27,7 +31,7 @@ public class MoneyTransferService implements TransferService {
         exceptionChecker.checkCard(moneyTransferRequestTO);
         exceptionChecker.checkInvalidCardParametersException(moneyTransferRequestTO);
 
-        final TransferOperation transferOperation = createAndAddtransferOperation(moneyTransferRequestTO);
+        final TransferOperation transferOperation = createAndAddTransferOperation(moneyTransferRequestTO);
         loggerOperations.writeOperation(transferOperation, "Создана");
         log.debug("MoneyTransferService.moneyTransferRequest  finish");
         return transferOperation.getId();
@@ -40,13 +44,14 @@ public class MoneyTransferService implements TransferService {
         exceptionChecker.checkOperation(confirmingOperationTO);
         exceptionChecker.checkCompletedOperationExceptions(confirmingOperationTO);
 
-        final TransferOperation transferOperation = transferAndConfirmOperaton(confirmingOperationTO);
+        final TransferOperation transferOperation = transferAndConfirmOperation(confirmingOperationTO, transfer);
         loggerOperations.writeOperation(transferOperation, "Исполнен");
         log.debug("MoneyTransferService.transferСonfirmation  finish");
         return transferOperation.getId();
     }
 
-    private TransferOperation createAndAddtransferOperation(MoneyTransferRequestTO moneyTransferRequestTO) {
+    //ToDo make the method private after the tests
+    public TransferOperation createAndAddTransferOperation(MoneyTransferRequestTO moneyTransferRequestTO) {
         TransferOperation transferOperation = new TransferOperation(moneyTransferRequestTO.amount(),
                 moneyTransferRequestTO.CARD_TO_NUMBER(),
                 moneyTransferRequestTO.CORD_FROM_NUMBER()
@@ -55,12 +60,15 @@ public class MoneyTransferService implements TransferService {
         return transferOperation;
     }
 
-    private TransferOperation transferAndConfirmOperaton(ConfirmingOperationTO confirmingOperationTO) {
+    //ToDo make the method private after the tests
+    public TransferOperation transferAndConfirmOperation(ConfirmingOperationTO confirmingOperationTO, Transfer transfer) {
         TransferOperation transferOperation = transferOperationRepository.get(confirmingOperationTO.operationId());
-        ;
-        Transfer.transferMoney(cardsRepository.get(transferOperation.getNumberCardFrom()),
-                cardsRepository.get(transferOperation.getNumberCardTo()),
-                transferOperation.getAmount());
+
+        Card from = cardsRepository.get(transferOperation.getNumberCardFrom());
+        Card to = cardsRepository.get(transferOperation.getNumberCardTo());
+        Amount amount = transferOperation.getAmount();
+
+        transfer.transferMoney(from, to, amount);
         transferOperation.setCompleted(true);
         return transferOperation;
     }
